@@ -1,3 +1,20 @@
+/*
+
+FEATURES:
+---------
+- En cada ronda destacar los colores del patrón de la máquena
+- 
+
+BUGS:
+---------
+- Cuando selecciono un color marca ese color para todas las respuestas de ese turno
+
+DONE:
+---------
+- En cada ronda destacar los colores que seleccione el usuario como respuesta
+
+*/
+
 class Simon {
     constructor(elem) {
         this.game = document.querySelector(elem);
@@ -9,10 +26,10 @@ class Simon {
         this.pattern = [];
         this.humanAnswer = [];
         this.elements = {
-            red: this.game.querySelector('.red'),
-            blue: this.game.querySelector('.blue'),
-            yellow: this.game.querySelector('.yellow'),
-            green: this.game.querySelector('.green')
+            red: this.game.querySelector('[data-color="red"]'),
+            blue: this.game.querySelector('[data-color="blue"]'),
+            yellow: this.game.querySelector('[data-color="yellow"]'),
+            green: this.game.querySelector('[data-color="green"]')
         }
     }
 
@@ -22,7 +39,6 @@ class Simon {
 
     increaseRoundCounter() {
         this.round++;
-        // console.log(this.round);
     }
 
     changeTurn() {
@@ -66,25 +82,53 @@ class Simon {
         this.changeTurn();
 
         if (this.turn === 'computer') {
-            console.log('computer');
+            // console.log('computer');
             this.addRandomColor();
         } else {
-            console.log('human');
+            // console.log('human');
             this.listenHumanAnswer();
-            // this.changeTurn();
-            // this.nextTurn();
         }
     }
 
     listenHumanAnswer() {
         this.humanAnswer = [];
         this.game.addEventListener('click', (e) => {
-            this.humanAnswer.push(e.target.getAttribute('class'));
-            console.log(this.humanAnswer.length);
-            // if (this.pattern.length === this.humanAnswer.length) {
-            //     this.nextTurn();
-            // }
+            this.humanAnswer.push(e.target.getAttribute('data-color'));
+            console.log(this.humanAnswer);
+            console.log(this.pattern.length);
+            if (this.pattern.length === this.humanAnswer.length) {
+                this.checkAnswer(this.humanAnswer);
+            }
         });
+    }
+
+    checkAnswer(answer) {
+        console.log('check answers');
+        console.log(this.pattern);
+        console.log(answer);
+
+        let areEqual = false;
+
+        for (let i in this.pattern) {
+            console.log(this.pattern[i], answer[i]);
+
+            if (this.pattern[i] === answer[i]) {
+                areEqual = true;
+            } else {
+                areEqual = false;
+            }
+        }
+
+        if (areEqual) {
+            this.nextTurn();
+        } else {
+            this.endGame();
+        }
+    }
+
+    endGame() {
+        alert('The Game has ended');
+        document.location.reload();
     }
 }
 
@@ -92,6 +136,6 @@ const GAME = new Simon('.app');
 const START_BUTTON = document.querySelector('button');
 
 START_BUTTON.addEventListener('click', (e) => {
-    START_BUTTON.classList.add('hidden');
+    START_BUTTON.setAttribute('hidden', true);
     GAME.init();
 });
