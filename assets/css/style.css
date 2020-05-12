@@ -75,6 +75,9 @@
 }
 
 /* COMPUTER */
+[data-turn="computer"] {
+    pointer-events: none;
+}
 
 /* HUMAN */
 [data-turn="human"] .board__cell {
