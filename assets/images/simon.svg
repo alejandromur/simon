@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <circle id="favicon-a" cx="24" cy="24" r="24"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <mask id="favicon-b" fill="#fff">
+      <use xlink:href="#favicon-a"/>
+    </mask>
+    <use fill="#D8D8D8" xlink:href="#favicon-a"/>
+    <rect width="24" height="24" fill="#48C774" mask="url(#favicon-b)"/>
+    <rect width="24" height="24" y="24" fill="#FFDD57" mask="url(#favicon-b)"/>
+    <rect width="24" height="24" x="24" fill="#F14668" mask="url(#favicon-b)"/>
+    <rect width="24" height="24" x="24" y="24" fill="#3298DC" mask="url(#favicon-b)"/>
+  </g>
+</svg>

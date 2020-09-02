@@ -1,97 +1,167 @@
+/*
+  TODO:
+  -----
+  - Different difficult levels
+  - Increase speed when the user completes each level
+  - Show alert when the patterns do not match
+
+  WISHLIST:
+  ---------
+
+  BUG:
+  ----
+*/
 class Simon {
-    constructor(elem) {
-        this.game = document.querySelector(elem);
-        this.colors = ['red', 'green', 'blue', 'yellow'];
-        this.colorsLength = this.colors.length;
-        this.round = 0;
-        this.turn = undefined;
-        this.lastColorSelected = '';
-        this.pattern = [];
-        this.humanAnswer = [];
-        this.elements = {
-            red: this.game.querySelector('.red'),
-            blue: this.game.querySelector('.blue'),
-            yellow: this.game.querySelector('.yellow'),
-            green: this.game.querySelector('.green')
-        }
-    }
+	constructor(elem) {
+		this.game = document.querySelector(elem)
+		this.colors = ['red', 'green', 'blue', 'yellow']
+		this.colorsLength = this.colors.length
+		this.round = 0
+		this.humanCounter = 0
+		this.turn = null
+		this.pattern = []
+		this.humanAnswer = []
+		this.elements = {
+			red: this.game.querySelector('[data-color="red"]'),
+			blue: this.game.querySelector('[data-color="blue"]'),
+			yellow: this.game.querySelector('[data-color="yellow"]'),
+			green: this.game.querySelector('[data-color="green"]'),
+		}
+	}
 
-    init() {
-        this.nextTurn();
-    }
+	init() {
+		// Get level selected
+		// Create this fn
+		this.game.addEventListener('click', event => this.captureEvent(event))
+		this.turn = 'computer'
+		this.game.setAttribute('data-turn', 'computer')
+		this.addRandomColor()
+	}
 
-    increaseRoundCounter() {
-        this.round++;
-        // console.log(this.round);
-    }
+	increaseRoundCounter() {
+		this.round++
+	}
 
-    changeTurn() {
-        if (this.turn === undefined) {
-            this.turn = 'computer';
-            this.game.setAttribute('data-turn', 'computer');
-            return;
-        }
+	toggleTurn() {
+		if (this.turn === 'computer') {
+			this.turn = 'human'
+			this.game.setAttribute('data-turn', 'human')
+		} else {
+			this.turn = 'computer'
+			this.game.setAttribute('data-turn', 'computer')
+		}
+		console.log(this.turn)
+	}
 
-        if (this.turn === 'computer') {
-            this.turn = 'human';
-            this.game.setAttribute('data-turn', 'human');
-        } else {
-            this.turn = 'computer';
-            this.game.setAttribute('data-turn', 'computer');
-        }
-        // this.nextTurn();
-    }
+	addRandomColor() {
+		let randomColor = Math.floor(Math.random() * this.colorsLength)
+		this.pattern = [...this.pattern, this.colors[randomColor]]
+		this.highlightPattern()
+	}
 
-    addRandomColor() {
-        let randomColor = Math.floor(Math.random() * this.colorsLength);
-        this.lastColorSelected = this.colors[randomColor];
-        this.pattern = [...this.pattern, this.lastColorSelected];
-        console.log(this.pattern);
-        this.highlightPattern();
-    }
+	highlightPattern() {
+		const highlightColor = (color, ms) =>
+			new Promise((resolve, reject) => {
+				setTimeout(() => {
+					this.elements[color].classList.add('is-active')
+				}, ms)
+				setTimeout(() => {
+					resolve(this.elements[color].classList.remove('is-active'))
+				}, ms + 500)
+			})
 
-    highlightPattern() {
-        setTimeout(() => {
-            this.elements[this.lastColorSelected].classList.add('is-active');
+		async function asyncForEach(array, callback) {
+			for (let index = 0; index < array.length; index++) {
+				await callback(array[index], index, array)
+			}
+		}
 
-            setTimeout(() => {
-                this.elements[this.lastColorSelected].classList.remove('is-active');
-                this.nextTurn();
-            }, 1000);
-        }, 1000);
-    }
+		const start = async () => {
+			await asyncForEach(this.pattern, async color => {
+				console.log(color)
+				await highlightColor(color, 1000)
+			})
+			console.log('Done')
+			this.nextTurn()
+		}
 
-    nextTurn() {
-        this.increaseRoundCounter();
-        this.changeTurn();
+		start()
+	}
 
-        if (this.turn === 'computer') {
-            console.log('computer');
-            this.addRandomColor();
-        } else {
-            console.log('human');
-            this.listenHumanAnswer();
-            // this.changeTurn();
-            // this.nextTurn();
-        }
-    }
+	nextTurn() {
+		this.increaseRoundCounter()
+		this.toggleTurn()
 
-    listenHumanAnswer() {
-        this.humanAnswer = [];
-        this.game.addEventListener('click', (e) => {
-            this.humanAnswer.push(e.target.getAttribute('class'));
-            console.log(this.humanAnswer.length);
-            // if (this.pattern.length === this.humanAnswer.length) {
-            //     this.nextTurn();
-            // }
-        });
-    }
+		if (this.turn === 'computer') {
+			this.addRandomColor()
+		} else {
+			this.resetHumanAnswer()
+		}
+	}
+
+	resetHumanAnswer() {
+		this.humanAnswer = []
+		this.humanCounter = 0
+	}
+
+	captureEvent(event) {
+		const target = event.target.getAttribute('data-color')
+
+		if (!target) {
+			return false
+		}
+
+		console.log(
+			target,
+			this.pattern.length - 1,
+			this.humanCounter,
+			this.pattern,
+			this.pattern[this.humanCounter]
+		)
+
+		if (target !== this.pattern[this.humanCounter]) {
+			this.endGame()
+		}
+
+		if (this.humanCounter === this.pattern.length - 1) {
+			this.nextTurn()
+		}
+		this.humanCounter++
+
+		// if (this.pattern.length === this.humanAnswer.length) {
+		// 	this.checkAnswer(this.humanAnswer)
+		// }
+	}
+
+	// checkAnswer(answer) {
+	// 	let areEqual = false
+
+	// 	for (let i in this.pattern) {
+	// 		//   console.log(this.pattern[i], answer[i]);
+
+	// 		if (this.pattern[i] === answer[i]) {
+	// 			areEqual = true
+	// 		} else {
+	// 			areEqual = false
+	// 		}
+	// 	}
+
+	// 	if (areEqual) {
+	// 		this.nextTurn()
+	// 	} else {
+	// 		this.endGame()
+	// 	}
+	// }
+
+	endGame() {
+		alert('The Game has ended')
+	}
 }
 
-const GAME = new Simon('.app');
-const START_BUTTON = document.querySelector('button');
+const game = new Simon('.app')
+const startButton = document.querySelector('.js-start')
 
-START_BUTTON.addEventListener('click', (e) => {
-    START_BUTTON.classList.add('hidden');
-    GAME.init();
-});
+startButton.addEventListener('click', e => {
+	startButton.setAttribute('hidden', true)
+	game.init()
+})
