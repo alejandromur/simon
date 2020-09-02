@@ -3,7 +3,6 @@
   -----
   - Different difficult levels
   - Increase speed when the user completes each level
-  - Show alert when the patterns do not match
 
   WISHLIST:
   ---------
@@ -111,14 +110,6 @@ class Simon {
 			return false
 		}
 
-		console.log(
-			target,
-			this.pattern.length - 1,
-			this.humanCounter,
-			this.pattern,
-			this.pattern[this.humanCounter]
-		)
-
 		if (target !== this.pattern[this.humanCounter]) {
 			this.endGame()
 		}
@@ -126,32 +117,9 @@ class Simon {
 		if (this.humanCounter === this.pattern.length - 1) {
 			this.nextTurn()
 		}
+
 		this.humanCounter++
-
-		// if (this.pattern.length === this.humanAnswer.length) {
-		// 	this.checkAnswer(this.humanAnswer)
-		// }
 	}
-
-	// checkAnswer(answer) {
-	// 	let areEqual = false
-
-	// 	for (let i in this.pattern) {
-	// 		//   console.log(this.pattern[i], answer[i]);
-
-	// 		if (this.pattern[i] === answer[i]) {
-	// 			areEqual = true
-	// 		} else {
-	// 			areEqual = false
-	// 		}
-	// 	}
-
-	// 	if (areEqual) {
-	// 		this.nextTurn()
-	// 	} else {
-	// 		this.endGame()
-	// 	}
-	// }
 
 	endGame() {
 		alert('The Game has ended')
