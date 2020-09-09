@@ -2,12 +2,10 @@
   TODO:
   -----
   - Different difficult levels
-	- Add counter/points
 	
   DOING:
-	-----
-	- Increase speed when the user completes each level
-	
+	-----	
+	- Add counter/points
 	
   WISHLIST:
   ---------
@@ -122,7 +120,7 @@ class Simon {
 
 			const start = async () => {
 				await asyncForEach(this.pattern, async color => {
-					await highlightColor(color, 1000)
+					await highlightColor(color, 1000 / this.round)
 				})
 				this.nextTurn()
 			}
