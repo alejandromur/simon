@@ -2,15 +2,16 @@
   TODO:
   -----
   - Different difficult levels
-  - Increase speed when the user completes each level
+	- Add counter/points
 	
   DOING:
 	-----
-  - Modify resetGame() from location.reload() to restart app
-
+	- Increase speed when the user completes each level
+	
 	
   WISHLIST:
   ---------
+  - Modify resetGame() from location.reload() to restart app
 
   BUG:
   ----
@@ -21,11 +22,12 @@ class Simon {
 		this.board = document.querySelector(elem)
 		this.startButton = document.querySelector('.js-start')
 		this.endButton = document.querySelector('.js-end')
+		this.roundscounter = document.querySelector('.js-round')
 		this.colors = ['red', 'green', 'blue', 'yellow']
 		this.colorsLength = this.colors.length
 		this.gameIsRunning = null
 		this.turn = null
-		this.round = 1
+		this.round = 0
 		this.pattern = []
 		this.humanCounter = 0
 		this.humanAnswer = []
@@ -46,7 +48,7 @@ class Simon {
 	}
 
 	endGame() {
-		console.log('game has ended')
+		alert('game has ended')
 		this.endButton.setAttribute('disabled', '')
 		this.startButton.removeAttribute('disabled')
 		this.board.removeAttribute('data-turn')
@@ -85,7 +87,9 @@ class Simon {
 	computerTurn() {
 		this.turn = 'computer'
 		this.board.setAttribute('data-turn', 'computer')
-		// console.log(`Round: ${this.round}`)
+		this.increaseRound()
+		this.updateRound()
+		console.log(`Round: ${this.round}`)
 
 		const addRandomColor = () => {
 			let randomColor = Math.floor(Math.random() * this.colorsLength)
@@ -118,9 +122,6 @@ class Simon {
 
 			const start = async () => {
 				await asyncForEach(this.pattern, async color => {
-					console.log(
-						`Color: ${color} - Pattern: ${this.pattern} - Round: ${this.round}`
-					)
 					await highlightColor(color, 1000)
 				})
 				this.nextTurn()
@@ -143,6 +144,10 @@ class Simon {
 		this.round++
 	}
 
+	updateRound() {
+		this.roundscounter.innerHTML = `Round: ${this.round}`
+	}
+
 	nextTurn() {
 		if (!this.gameIsRunning) {
 			return false
@@ -153,8 +158,6 @@ class Simon {
 		} else {
 			this.computerTurn()
 		}
-
-		this.increaseRound()
 	}
 }
 
