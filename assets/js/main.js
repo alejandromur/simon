@@ -1,11 +1,12 @@
 /*
   TODO:
   -----
-  - Different difficult levels
+	- Different difficult levels
+	- Create a specific class for the game counter
 	
   DOING:
 	-----	
-	- Add counter/points
+	- Add Points
 	
   WISHLIST:
   ---------
@@ -19,7 +20,6 @@ class Simon {
 	constructor(elem) {
 		this.board = document.querySelector(elem)
 		this.startButton = document.querySelector('.js-start')
-		this.endButton = document.querySelector('.js-end')
 		this.roundscounter = document.querySelector('.js-round')
 		this.colors = ['red', 'green', 'blue', 'yellow']
 		this.colorsLength = this.colors.length
@@ -33,13 +33,11 @@ class Simon {
 
 	bindEvents() {
 		this.startButton.addEventListener('click', this.startGame.bind(this))
-		this.endButton.addEventListener('click', this.endGame.bind(this))
 	}
 
 	startGame() {
 		console.log('game has started', this)
 		this.startButton.setAttribute('disabled', '')
-		this.endButton.removeAttribute('disabled')
 		this.board.addEventListener('click', this.listener.bind(this))
 		this.gameIsRunning = true
 		this.computerTurn()
@@ -47,7 +45,6 @@ class Simon {
 
 	endGame() {
 		alert('game has ended')
-		this.endButton.setAttribute('disabled', '')
 		this.startButton.removeAttribute('disabled')
 		this.board.removeAttribute('data-turn')
 		this.board.removeEventListener('click', this.listener)
@@ -57,11 +54,6 @@ class Simon {
 
 	resetGame() {
 		window.location.reload()
-		// this.turn = null
-		// this.round = 1
-		// this.pattern = []
-		// this.humanCounter = 0
-		// this.humanAnswer = []
 	}
 
 	listener(event) {

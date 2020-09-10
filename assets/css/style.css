@@ -15,20 +15,30 @@
 
 /* UTILITIES */
 [data-color='red'] {
-	background-color: var(--red);
+	background-color: var(--red, #f14668);
 }
 [data-color='green'] {
-	background-color: var(--green);
+	background-color: var(--green, #48c774);
 }
 [data-color='blue'] {
-	background-color: var(--blue);
+	background-color: var(--blue, #3298dc);
 }
 [data-color='yellow'] {
-	background-color: var(--yellow);
+	background-color: var(--yellow, #ffdd57);
+}
+
+/* ANIMATIONS */
+@keyframes show {
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%);
+	}
 }
 
 /* APP */
 .app {
+	width: clamp(320px, 680px, 95vw);
+	margin: 0 auto;
 	position: relative;
 }
 
@@ -44,17 +54,23 @@
 	top: 50%;
 	left: 50%;
 	z-index: 1;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, -40%);
 	box-shadow: 0 2px 2px 0 rgba(20, 20, 20, 0.15),
 		0 4px 4px 0 rgba(30, 30, 30, 0.13);
 	transition: all 200ms ease;
 	cursor: pointer;
+	opacity: 0;
+	animation: show 350ms ease-in 300ms 1 forwards;
 }
 
 .btn:hover {
 	transform: translate(-50%, -52%);
 	box-shadow: 0 1px 1px 0 rgba(20, 20, 20, 0.15),
 		0 2px 2px 0 rgba(30, 30, 30, 0.1);
+}
+
+.btn[disabled] {
+	display: none;
 }
 
 /* BOARD */
