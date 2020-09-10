@@ -43,8 +43,8 @@
 }
 
 .btn {
-	padding: 2rem 4rem;
-	font-size: 2.5rem;
+	padding: 1rem 2rem;
+	font-size: 1.5rem;
 	font-weight: bold;
 	border: 0;
 	border-radius: 3.75rem;
@@ -78,8 +78,8 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: 1fr 1fr;
-	height: 100vh;
-	clip-path: circle(33% at 50% 50%);
+	height: 90vh;
+	clip-path: circle(45vw at 50% 50%);
 }
 
 .board__cell {
@@ -96,6 +96,13 @@
 	opacity: 1;
 }
 
+/* COUNTER */
+.counter {
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+}
+
 /* COMPUTER */
 [data-turn='computer'] {
 	pointer-events: none;
@@ -108,4 +115,15 @@
 
 [data-turn='human'] .board__cell:active {
 	opacity: 1;
+}
+
+@media screen and (min-width: 35em) {
+	.board {
+		clip-path: circle(33% at 50% 50%);
+	}
+
+	.btn {
+		padding: 2rem 4rem;
+		font-size: 2.5rem;
+	}
 }
